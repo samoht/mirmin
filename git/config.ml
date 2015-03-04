@@ -1,6 +1,13 @@
 open Mirage
 
-let stack = direct_stackv4_with_default_ipv4 default_console tap0
+let stack =
+  let direct () = direct_stackv4_with_dhcp default_console tap0 in
+  let static () = direct_stackv4_with_default_ipv4 default_console tap0 in
+  try
+    match Sys.getenv "NET" with
+    | "static" -> static ()
+    | _        -> direct ()
+  with Not_found -> direct ()
 
 let main = foreign "Unikernel.Main" @@ console @-> stackv4 @-> job
 
