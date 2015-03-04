@@ -1,5 +1,5 @@
 (*
-let () = 
+let () =
   Log.set_log_level Log.DEBUG;
   Log.set_time (fun () -> OS.Time.Monotonic.(to_seconds (time ())))
 *)
@@ -30,10 +30,10 @@ module Main (C: V1_LWT.CONSOLE) (S: V1_LWT.STACKV4) = struct
   let start c stack =
     log_s c "Starting ..." >>= fun () ->
     let res = Resolver_lwt.init ~service () in
-    RES.register ~stack res; 
+    RES.register ~stack res;
     CON.init ~stack () >>= fun conduit ->
     let ctx = res, conduit in
-    
+
     log_s c "Running 'git ls-remote %s'" uri_str >>= fun () ->
     Git.Memory.create () >>= fun t ->
     Sync.ls ~ctx t gri >>= fun map ->
