@@ -13,16 +13,17 @@ let main = foreign "Unikernel.Main" @@ console @-> stackv4 @-> job
 
 let () =
   add_to_ocamlfind_libraries [
-    "conduit.lwt"; "conduit.mirage"; "dns.mirage"; "git.mirage"
+    "conduit.lwt"; "conduit.mirage";
+    "dns.mirage"; "git.mirage";
   ];
   match Mirage.get_mode () with
-  | `Xen -> add_to_ocamlfind_libraries ["zlib-xen.xen"]
+  | `Xen -> add_to_ocamlfind_libraries ["camlzip.xen"; "zlib-xen.xen"]
   | _    -> ()
 
 let () =
   add_to_opam_packages [ "mirage-dns"; "conduit"; "git" ];
   match Mirage.get_mode () with
-  | `Xen -> add_to_opam_packages ["zlib-xen"]
+  | `Xen -> add_to_opam_packages ["zlib-xen"; "mirage-http"]
   | _    -> ()
 
 let () =
