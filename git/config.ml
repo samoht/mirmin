@@ -16,7 +16,7 @@ let () =
     "conduit.lwt"; "conduit.mirage"; "dns.mirage"; "git.mirage"
   ];
   match Mirage.get_mode () with
-  | `Xen -> add_to_ocamlfind_libraries ["zlib.xen"]
+  | `Xen -> add_to_ocamlfind_libraries ["zlib-xen.xen"]
   | _    -> ()
 
 let () =
