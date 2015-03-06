@@ -21,9 +21,11 @@ let () =
   | _    -> ()
 
 let () =
-  add_to_opam_packages [ "mirage-dns"; "conduit"; "git" ];
+  add_to_opam_packages [
+    "mirage-dns"; "conduit"; "git"; "mirage-http"; "mirage-flow"
+  ];
   match Mirage.get_mode () with
-  | `Xen -> add_to_opam_packages ["zlib-xen"; "mirage-http"]
+  | `Xen -> add_to_opam_packages ["zlib-xen"]
   | _    -> ()
 
 let () =
