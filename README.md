@@ -12,6 +12,7 @@ opam pin add conduit https://github.com/samoht/ocaml-conduit.git#no-resolver-ove
 opam pin add cohttp https://github.com/samoht/ocaml-cohttp.git#git-xen -n
 opam pin add mirage-http https://github.com/samoht/mirage-http.git -n
 opam pin add git https://github.com/samoht/ocaml-git.git#mirage-io -n
+opam install mirage
 ```
 
 You should now be able to run:
