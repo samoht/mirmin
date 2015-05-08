@@ -20,14 +20,16 @@ module Main (C: V1_LWT.CONSOLE) (S: V1_LWT.STACKV4) = struct
 
   module DNS = Dns_resolver_mirage.Make(OS.Time)(S)
   module RES = Resolver_mirage.Make(DNS)
-  module CON = Conduit_mirage.Make(S)(Conduit_localhost)
+  module CON = Conduit_mirage.Make(S)(Conduit_localhost)(Conduit_mirage.No_TLS)
 
   module Mirage_sync = Git_mirage.Sync(CON)
   module Sync = Mirage_sync.Make(Git.Memory)
 
   let log_s c fmt = Printf.ksprintf (C.log_s c) fmt
 
-  let start c stack =
+  let start c stack = 
+    log_s c "Starting ..." >>= fun () ->
+    OS.Time.sleep 3. >>= fun () ->
     log_s c "Starting ..." >>= fun () ->
     let res = Resolver_lwt.init ~service () in
     RES.register ~stack res;

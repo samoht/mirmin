@@ -1,32 +1,27 @@
 open Mirage
 
+let ipv4 = {
+  Mirage.address = Ipaddr.V4.of_string_exn "192.168.33.11";
+  netmask        = Ipaddr.V4.of_string_exn "255.255.255.0";
+  gateways       = [Ipaddr.V4.of_string_exn "192.168.33.10"];
+}
+
 let stack =
   let direct () = direct_stackv4_with_dhcp default_console tap0 in
-  let static () = direct_stackv4_with_default_ipv4 default_console tap0 in
+  let static () = direct_stackv4_with_static_ipv4 default_console tap0 ipv4 in
+  let socket () = socket_stackv4 default_console [] in
   try
     match Sys.getenv "NET" with
     | "static" -> static ()
+    | "socket" -> socket ()
     | _        -> direct ()
   with Not_found -> direct ()
 
 let main = foreign "Unikernel.Main" @@ console @-> stackv4 @-> job
 
 let () =
-  add_to_ocamlfind_libraries [
-    "conduit.lwt"; "conduit.mirage";
-    "dns.mirage"; "git.mirage";
-  ];
-  match Mirage.get_mode () with
-  | `Xen -> add_to_ocamlfind_libraries ["camlzip.xen"; "zlib-xen.xen"]
-  | _    -> ()
-
-let () =
-  add_to_opam_packages [
-    "mirage-dns"; "conduit"; "git"; "mirage-http"; "mirage-flow"
-  ];
-  match Mirage.get_mode () with
-  | `Xen -> add_to_opam_packages ["zlib-xen"]
-  | _    -> ()
+  add_to_ocamlfind_libraries [ "conduit.lwt"; "conduit.mirage"; "git.mirage" ];
+  add_to_opam_packages [ "conduit"; "git"; "mirage-http"]
 
 let () =
   register "git" [ main $ default_console $ stack ]
