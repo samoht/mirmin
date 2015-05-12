@@ -10,7 +10,7 @@ cross-compile few C packages to Xen, using the
 
 ```
 opam repo add mirage-dev https://github.com/samoht/mirage-dev.git
-opam pin add git https://github.com/samoht/ocaml-git.git#mirage-io -n
+opam pin add git --dev -n
 ```
 
 You should now be able to run:
