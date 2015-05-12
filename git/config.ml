@@ -21,7 +21,7 @@ let main = foreign "Unikernel.Main" @@ console @-> stackv4 @-> job
 
 let () =
   add_to_ocamlfind_libraries [ "conduit.lwt"; "conduit.mirage"; "git.mirage" ];
-  add_to_opam_packages [ "conduit"; "git"; "mirage-http"]
+  add_to_opam_packages [ "conduit"; "git"; "mirage-flow"; "mirage-http"]
 
 let () =
   register "git" [ main $ default_console $ stack ]
