@@ -20,20 +20,23 @@ module Main (C: V1_LWT.CONSOLE) (S: V1_LWT.STACKV4) = struct
 
   module DNS = Dns_resolver_mirage.Make(OS.Time)(S)
   module RES = Resolver_mirage.Make(DNS)
-  module CON = Conduit_mirage.Make(S)(Conduit_localhost)(Conduit_mirage.No_TLS)
 
-  module Mirage_sync = Git_mirage.Sync(CON)
+  module Mirage_sync = Git_mirage.Sync
   module Sync = Mirage_sync.Make(Git.Memory)
 
   let log_s c fmt = Printf.ksprintf (C.log_s c) fmt
 
-  let start c stack = 
+  let conduit = Conduit_mirage.empty
+  let stackv4 = Conduit_mirage.stackv4 (module S)
+
+  let start c stack =
     log_s c "Starting ..." >>= fun () ->
     OS.Time.sleep 3. >>= fun () ->
     log_s c "Starting ..." >>= fun () ->
     let res = Resolver_lwt.init ~service () in
     RES.register ~stack res;
-    CON.init ~stack () >>= fun conduit ->
+    Conduit_mirage.with_tcp conduit stackv4 stack >>= fun conduit ->
+    Conduit_mirage.with_tls conduit               >>= fun conduit ->
     let ctx = res, conduit in
 
     log_s c "Running 'git ls-remote %s'" uri_str >>= fun () ->
