@@ -5,16 +5,8 @@ let () =
 *)
 
 let (>>=) = Lwt.bind
-let uri_str = "git://github.com/samoht/opam-repository.git"
+let uri_str = "https://github.com/samoht/opam-repository.git"
 let gri = Git.Gri.of_string uri_str
-
-let git_service = {
-    Resolver.name = "git"; port = 9418; tls = false
-  }
-
-let service = function
-  | "git"  -> Lwt.return (Some git_service)
-  | _      -> Lwt.return_none
 
 module Main (C: V1_LWT.CONSOLE) (S: V1_LWT.STACKV4) = struct
 
@@ -31,9 +23,7 @@ module Main (C: V1_LWT.CONSOLE) (S: V1_LWT.STACKV4) = struct
 
   let start c stack =
     log_s c "Starting ..." >>= fun () ->
-    OS.Time.sleep 3. >>= fun () ->
-    log_s c "Starting ..." >>= fun () ->
-    let res = Resolver_lwt.init ~service () in
+    let res = Resolver_lwt.init () in
     RES.register ~stack res;
     Conduit_mirage.with_tcp conduit stackv4 stack >>= fun conduit ->
     Conduit_mirage.with_tls conduit               >>= fun conduit ->
