@@ -17,7 +17,7 @@ let stack =
     | _        -> direct ()
   with Not_found -> direct ()
 
-let main = foreign "Unikernel.Main" @@ console @-> stackv4 @-> job
+let main = foreign "Unikernel.Main" @@ console @-> clock @-> stackv4 @-> job
 
 let () =
   add_to_ocamlfind_libraries [ "conduit.lwt"; "conduit.mirage"; "irmin.mirage"];
@@ -26,4 +26,4 @@ let () =
   ]
 
 let () =
-  register "irmin" [ main $ default_console $ stack ]
+  register "irmin" [ main $ default_console $ default_clock $ stack ]
