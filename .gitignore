@@ -1,0 +1,8 @@
+*~
+main.*
+*.xl
+*.xe
+*.xen
+*/Makefile
+*/_build
+*/*_libvirt.xml
