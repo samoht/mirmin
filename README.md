@@ -1,5 +1,6 @@
-***Warning: this repository is out-dated and won't work with recent versions of MirageOS and Irmin**
+# WARNING: this repository is out-dated and won't work with recent versions of MirageOS and Irmin
 
+---
 
 ## Examples of Mirage unikernels using Irmin
 
