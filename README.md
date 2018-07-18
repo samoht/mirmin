@@ -1,3 +1,6 @@
+***Warning: this repository is out-dated and won't work with recent versions of MirageOS and Irmin**
+
+
 ## Examples of Mirage unikernels using Irmin
 
 - `git/` contains a unikernel using `ocaml-git` only.
